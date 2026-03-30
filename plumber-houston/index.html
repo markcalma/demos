@@ -260,6 +260,83 @@
     .footer-links a:hover { color: var(--text); }
     .footer-copy { color: var(--text-secondary); font-size: 0.78rem; }
 
+    /* ── Gallery ── */
+    #gallery { position: relative; z-index: 1; padding: 100px 32px; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: 16px;
+      max-width: 1100px;
+      margin: 60px auto 0;
+    }
+    .gallery-item {
+      border-radius: 16px; overflow: hidden; position: relative;
+      border: 1px solid var(--border);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .gallery-item:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    .gallery-item.large { grid-column: span 2; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 220px; }
+    .gallery-item .gallery-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px 20px 16px;
+      background: linear-gradient(to top, rgba(9,17,31,0.9), transparent);
+      font-size: 0.82rem; font-weight: 600; letter-spacing: 0.02em;
+      color: rgba(255,255,255,0.9);
+    }
+    @media (max-width: 768px) {
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-item.large { grid-column: span 2; }
+    }
+    @media (max-width: 500px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-item.large { grid-column: span 1; }
+    }
+
+    /* ── Contact Form ── */
+    #contact { position: relative; z-index: 1; padding: 100px 32px; }
+    .contact-wrap {
+      max-width: 720px; margin: 60px auto 0;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 24px; padding: 56px;
+      backdrop-filter: blur(20px);
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .form-group label { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 18px; color: var(--text);
+      font-family: var(--font-body); font-size: 0.92rem;
+      transition: border-color 0.2s, box-shadow 0.2s; outline: none; width: 100%;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--text-secondary); }
+    .form-group select option { background: #09111F; }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: rgba(var(--accent-rgb), 0.5);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.1);
+    }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-submit {
+      width: 100%; padding: 16px; background: var(--accent); color: #000;
+      border: none; border-radius: 14px; font-family: var(--font-display);
+      font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 8px;
+      box-shadow: 0 0 28px rgba(var(--accent-rgb),0.35);
+      transition: all 0.3s ease;
+    }
+    .form-submit:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(var(--accent-rgb),0.55); }
+    .form-note { text-align: center; margin-top: 16px; font-size: 0.78rem; color: var(--text-secondary); }
+    @media (max-width: 600px) {
+      .contact-wrap { padding: 32px 24px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
     /* ── Reveal ── */
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -278,7 +355,8 @@
       </a>
       <div class="nav-links">
         <a href="#features">Services</a>
-        <a href="#specs">About</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#contact">Contact</a>
         <a href="#cta" class="nav-cta">Call Now</a>
       </div>
     </div>
@@ -386,6 +464,80 @@
         <h3>Water Heater Experts</h3>
         <p>Same-day water heater replacement for all brands and types. Tankless installations with manufacturer warranty support.</p>
       </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section id="gallery">
+    <div class="section-header reveal">
+      <span class="section-label">Our Work</span>
+      <h2 class="section-title">Seen It All.<br>Fixed It All.</h2>
+      <p class="section-sub">From emergency burst pipes to full bathroom repiping — here's a look at what we do every day across Houston.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item large reveal">
+        <img src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=900&q=80" alt="Plumber fixing pipes under sink">
+        <div class="gallery-label">Pipe Repair &amp; Leak Detection</div>
+      </div>
+      <div class="gallery-item reveal">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Water heater installation">
+        <div class="gallery-label">Water Heater Install</div>
+      </div>
+      <div class="gallery-item reveal">
+        <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&q=80" alt="Drain cleaning service">
+        <div class="gallery-label">Drain Cleaning</div>
+      </div>
+      <div class="gallery-item reveal">
+        <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80" alt="Bathroom plumbing">
+        <div class="gallery-label">Bathroom Plumbing</div>
+      </div>
+      <div class="gallery-item large reveal">
+        <img src="https://images.unsplash.com/photo-1607400201515-c2c41c07d307?w=900&q=80" alt="Emergency plumbing repair">
+        <div class="gallery-label">Emergency Repairs — 24/7</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Form -->
+  <section id="contact">
+    <div class="section-header reveal">
+      <span class="section-label">Get in Touch</span>
+      <h2 class="section-title">Request a<br>Free Estimate</h2>
+      <p class="section-sub">Tell us what's going on. A licensed plumber will follow up within the hour — no call centers, no runaround.</p>
+    </div>
+    <div class="contact-wrap reveal">
+      <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" placeholder="John Smith" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="(713) 555-0182" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="service">Service Needed</label>
+          <select id="service" name="service" required>
+            <option value="" disabled selected>Select a service...</option>
+            <option>Emergency Repair</option>
+            <option>Leak Detection &amp; Repair</option>
+            <option>Drain Cleaning</option>
+            <option>Water Heater (Repair or Replace)</option>
+            <option>Repiping</option>
+            <option>Bathroom / Kitchen Plumbing</option>
+            <option>Sewer Line</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Describe the Problem</label>
+          <textarea id="message" name="message" placeholder="What's happening? When did it start?"></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Request →</button>
+        <p class="form-note">⚡ We typically respond within 60 minutes · No spam, ever.</p>
+      </form>
     </div>
   </section>
 
