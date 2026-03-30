@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bayou City Plumbing — Houston's Emergency Plumbing Experts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #FF6B2B;
+      --accent-rgb: 255, 107, 43;
+      --accent-light: #FF8C55;
+      --bg: #09111F;
+      --bg-card: rgba(255,255,255,0.03);
+      --border: rgba(255,255,255,0.06);
+      --text: #FFFFFF;
+      --text-secondary: #7A8899;
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-body: 'Archivo', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    h1,h2,h3,h4,h5,h6 { font-family: var(--font-display); }
+    ::selection { background: var(--accent); color: #000; }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, var(--accent), var(--accent-light)); border-radius: 4px; }
+
+    /* ── Scroll Progress ── */
+    #scrollProgress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-light));
+      z-index: 10001; transition: width 0.1s linear;
+      box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.5);
+    }
+
+    /* ── Navbar ── */
+    #navbar {
+      position: fixed; top: 12px; left: 0; right: 0; z-index: 1000;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nav-inner {
+      max-width: 100%; margin: 0 auto; padding: 14px 36px;
+      display: flex; justify-content: space-between; align-items: center;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #navbar.nav-scrolled .nav-inner {
+      max-width: 860px;
+      background: rgba(9,17,31,0.8);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-radius: 100px; padding: 10px 24px;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
+    .nav-badge {
+      width: 34px; height: 34px; border-radius: 10px; background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-weight: 800; font-size: 0.75rem; color: #000;
+    }
+    .nav-name { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; letter-spacing: -0.02em; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.88rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent) !important; color: #000 !important;
+      padding: 9px 20px; border-radius: 10px; font-weight: 700 !important;
+      font-size: 0.85rem !important; box-shadow: 0 0 16px rgba(var(--accent-rgb),0.25);
+      transition: all 0.2s ease !important;
+    }
+    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 0 28px rgba(var(--accent-rgb),0.45) !important; }
+    @media (max-width: 768px) { .nav-links { display: none; } }
+
+    /* ── Hero with Video ── */
+    #hero {
+      position: relative; width: 100%; height: 100vh;
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+    }
+    .hero-video-wrap {
+      position: absolute; inset: 0; z-index: 0;
+    }
+    .hero-video-wrap video {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    /* Dark overlay so text is readable */
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(
+        to bottom,
+        rgba(9,17,31,0.55) 0%,
+        rgba(9,17,31,0.35) 40%,
+        rgba(9,17,31,0.65) 100%
+      );
+    }
+    .hero-content {
+      position: relative; z-index: 2; text-align: center;
+      max-width: 760px; padding: 0 24px;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 6px 14px; border-radius: 100px;
+      border: 1px solid rgba(var(--accent-rgb), 0.4);
+      background: rgba(var(--accent-rgb), 0.1);
+      color: var(--accent); font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 28px;
+      backdrop-filter: blur(10px);
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50% { opacity:0.4; transform:scale(0.7); }
+    }
+    .hero-title {
+      font-size: clamp(2.4rem, 6vw, 5rem); font-weight: 800;
+      letter-spacing: -0.04em; line-height: 1; margin-bottom: 22px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    }
+    .hero-title .accent { color: var(--accent); }
+    .hero-title .dim {
+      background: linear-gradient(to right, #fff, rgba(255,255,255,0.6));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-subtitle {
+      font-size: clamp(1rem, 2vw, 1.15rem); color: rgba(255,255,255,0.8);
+      line-height: 1.65; max-width: 540px; margin: 0 auto 38px;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+    }
+    .hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--accent); color: #000; padding: 16px 36px; border-radius: 14px;
+      font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+      box-shadow: 0 0 28px rgba(var(--accent-rgb),0.4); transition: all 0.3s ease;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(var(--accent-rgb),0.6); }
+    .btn-secondary {
+      background: rgba(255,255,255,0.08); color: #fff; padding: 16px 36px; border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.2); font-family: var(--font-display);
+      font-weight: 600; font-size: 0.95rem; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      backdrop-filter: blur(10px); transition: all 0.3s ease;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.35); transform: translateY(-2px); }
+
+    /* Scroll hint arrow */
+    .scroll-hint {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: rgba(255,255,255,0.5); font-size: 0.72rem; letter-spacing: 0.1em;
+      text-transform: uppercase; z-index: 2;
+      animation: floatHint 2.5s ease-in-out infinite;
+    }
+    .scroll-arrow {
+      width: 18px; height: 18px;
+      border-right: 2px solid rgba(255,255,255,0.4);
+      border-bottom: 2px solid rgba(255,255,255,0.4);
+      transform: rotate(45deg);
+    }
+    @keyframes floatHint {
+      0%,100% { transform: translateX(-50%) translateY(0); opacity:0.6; }
+      50% { transform: translateX(-50%) translateY(6px); opacity:1; }
+    }
+
+    /* ── Specs ── */
+    #specs {
+      position: relative; z-index: 1;
+      background: linear-gradient(180deg, transparent, rgba(var(--accent-rgb),0.03) 50%, transparent);
+    }
+    .specs-grid {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 40px;
+      max-width: 1000px; margin: 0 auto; padding: 100px 32px; text-align: center;
+    }
+    .spec-number {
+      font-family: var(--font-display); font-size: 3.5rem; font-weight: 800;
+      letter-spacing: -0.04em; display: block; transition: text-shadow 0.3s ease;
+    }
+    .spec-number.counting { text-shadow: 0 0 24px rgba(var(--accent-rgb),0.55); }
+    .spec-label {
+      font-size: 0.82rem; color: var(--text-secondary); margin-top: 8px;
+      display: block; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500;
+    }
+    .spec-divider { width: 28px; height: 2px; background: var(--accent); margin: 10px auto 0; border-radius: 2px; opacity: 0.6; }
+    @media (max-width: 768px) {
+      .specs-grid { grid-template-columns: repeat(2,1fr); gap: 28px; padding: 70px 24px; }
+      .spec-number { font-size: 2.6rem; }
+    }
+
+    /* ── Section headers ── */
+    .section-header { text-align: center; padding: 0 24px; max-width: 640px; margin: 0 auto; }
+    .section-label {
+      display: inline-block; font-family: var(--font-mono); font-size: 0.68rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 800;
+      letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 16px;
+    }
+    .section-sub { color: var(--text-secondary); font-size: 1rem; line-height: 1.65; }
+
+    /* ── Features ── */
+    #features { position: relative; z-index: 1; padding-top: 80px; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 20px;
+      max-width: 1100px; margin: 0 auto; padding: 60px 32px 100px;
+    }
+    .feature-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      backdrop-filter: blur(20px); border-radius: 20px; padding: 32px;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .feature-card:hover { transform: translateY(-4px); border-color: rgba(var(--accent-rgb),0.2); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+    .feature-icon {
+      font-size: 1.8rem; margin-bottom: 18px; display: flex; align-items: center; justify-content: center;
+      width: 52px; height: 52px; border-radius: 14px;
+      background: rgba(var(--accent-rgb),0.1); border: 1px solid rgba(var(--accent-rgb),0.15);
+    }
+    .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .feature-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+    @media (max-width: 900px) { .features-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 600px) { .features-grid { grid-template-columns: 1fr; } }
+
+    /* ── CTA ── */
+    #cta { position: relative; z-index: 1; text-align: center; padding: 120px 32px; overflow: hidden; }
+    .cta-orb {
+      position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      background: var(--accent); filter: blur(160px); opacity: 0.07;
+      top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none;
+    }
+    .cta-content { position: relative; z-index: 2; max-width: 580px; margin: 0 auto; }
+    .cta-content h2 { font-size: clamp(2rem,4.5vw,3.5rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 20px; }
+    .cta-content p { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.65; margin-bottom: 40px; }
+    .btn-large { font-size: 1.05rem !important; padding: 20px 52px !important; }
+    .cta-note { margin-top: 20px; font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .cta-note-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; }
+
+    /* ── Footer ── */
+    footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 60px 32px 40px; text-align: center; }
+    .footer-inner { max-width: 960px; margin: 0 auto; }
+    .footer-brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 28px; }
+    .footer-logo {
+      width: 36px; height: 36px; border-radius: 10px; background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-weight: 800; font-size: 0.75rem; color: #000;
+    }
+    .footer-name { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; letter-spacing: -0.02em; }
+    .footer-links { display: flex; justify-content: center; gap: 28px; margin-bottom: 24px; flex-wrap: wrap; }
+    .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { color: var(--text-secondary); font-size: 0.78rem; }
+
+    /* ── Reveal ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <div id="scrollProgress"></div>
+
+  <!-- Navbar -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a class="nav-logo" href="#">
+        <div class="nav-badge">BCP</div>
+        <span class="nav-name">Bayou City Plumbing</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Services</a>
+        <a href="#specs">About</a>
+        <a href="#cta" class="nav-cta">Call Now</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero with Autoplay Video -->
+  <section id="hero">
+    <div class="hero-video-wrap">
+      <video autoplay muted loop playsinline>
+        <source src="ca016738e86f881edd4e92595bc01e62_1774842322_ervahryv.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        Houston's #1 Emergency Plumbers
+      </div>
+      <h1 class="hero-title">
+        We Fix It <span class="accent">Right.</span><br>
+        <span class="dim">The First Time.</span>
+      </h1>
+      <p class="hero-subtitle">
+        24/7 emergency service across Greater Houston. Licensed, insured, and
+        backed by a satisfaction guarantee — because a burst pipe can't wait.
+      </p>
+      <div class="hero-buttons">
+        <a href="#cta" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.6 19.79 19.79 0 01.02 2.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+          Call (713) 555-0182
+        </a>
+        <a href="#features" class="btn-secondary">
+          Our Services
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>Scroll to explore</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- Specs -->
+  <section id="specs">
+    <div class="specs-grid">
+      <div class="spec-item" data-target="24" data-suffix="/7">
+        <span class="spec-number">0</span>
+        <span class="spec-label">Emergency Service</span>
+        <div class="spec-divider"></div>
+      </div>
+      <div class="spec-item" data-target="15" data-suffix="+">
+        <span class="spec-number">0</span>
+        <span class="spec-label">Years in Houston</span>
+        <div class="spec-divider"></div>
+      </div>
+      <div class="spec-item" data-target="4.9" data-suffix="★">
+        <span class="spec-number">0</span>
+        <span class="spec-label">Google Rating</span>
+        <div class="spec-divider"></div>
+      </div>
+      <div class="spec-item" data-target="98" data-suffix="%">
+        <span class="spec-number">0</span>
+        <span class="spec-label">Same-Day Fix Rate</span>
+        <div class="spec-divider"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features">
+    <div class="section-header reveal">
+      <span class="section-label">Why Bayou City</span>
+      <h2 class="section-title">Built for Houston Homeowners</h2>
+      <p class="section-sub">No call centers. No upselling. Just experienced plumbers who show up, fix the problem, and leave your home better than they found it.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔧</div>
+        <h3>Licensed &amp; Insured</h3>
+        <p>Fully licensed by the Texas State Board of Plumbing Examiners. Bonded and insured for your complete protection.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">⚡</div>
+        <h3>24/7 Emergency Service</h3>
+        <p>Burst pipe at 2am? We answer every call. Our on-call team is dispatched immediately — nights, weekends, and holidays.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">💰</div>
+        <h3>Upfront Flat Pricing</h3>
+        <p>You receive a written estimate before any work begins. No surprise charges. No "and then we discovered..." add-ons.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">✅</div>
+        <h3>Satisfaction Guaranteed</h3>
+        <p>Every repair is backed by our 15-year workmanship warranty. If it fails, we come back and fix it at zero cost to you.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🏠</div>
+        <h3>Full-Service Plumbing</h3>
+        <p>Leak repair, full repiping, sewer lines, water heaters, drain clearing, bathroom remodels — one call covers it all.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🌡️</div>
+        <h3>Water Heater Experts</h3>
+        <p>Same-day water heater replacement for all brands and types. Tankless installations with manufacturer warranty support.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta">
+    <div class="cta-orb"></div>
+    <div class="cta-content reveal">
+      <span class="section-label">Ready to help</span>
+      <h2>Pipe trouble?<br>We're on our way.</h2>
+      <p>Houston's emergency plumbing specialists. Get a free estimate from a licensed plumber — not a call center.</p>
+      <a href="tel:7135550182" class="btn-primary btn-large">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.6 19.79 19.79 0 01.02 2.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+        Call (713) 555-0182
+      </a>
+      <p class="cta-note">
+        <span class="cta-note-dot"></span>
+        Answering calls right now · Average wait: under 30 seconds
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">BCP</div>
+        <span class="footer-name">Bayou City Plumbing</span>
+      </div>
+      <div class="footer-links">
+        <a href="#">Services</a>
+        <a href="#">Emergency</a>
+        <a href="#">About</a>
+        <a href="#">Reviews</a>
+        <a href="#">Contact</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 Bayou City Plumbing. All rights reserved. · Houston, TX · TSBPE License #12345</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll progress bar
+    const scrollProgress = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+      const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      scrollProgress.style.width = pct + '%';
+    }, { passive: true });
+
+    // Navbar pill on scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('nav-scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // Specs count-up
+    function easeOutExpo(t) { return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+    function countUp(el, target, suffix, duration = 1800) {
+      const start = performance.now();
+      el.classList.add('counting');
+      function update(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const val = easeOutExpo(progress) * target;
+        el.textContent = (target % 1 === 0 ? Math.floor(val) : val.toFixed(1)) + suffix;
+        if (progress < 1) requestAnimationFrame(update);
+        else { el.textContent = target + suffix; el.classList.remove('counting'); }
+      }
+      requestAnimationFrame(update);
+    }
+    const specObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('.spec-item').forEach((item, i) => {
+            setTimeout(() => countUp(
+              item.querySelector('.spec-number'),
+              parseFloat(item.dataset.target),
+              item.dataset.suffix || ''
+            ), i * 180);
+          });
+          specObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    specObserver.observe(document.getElementById('specs'));
+
+    // Scroll reveal
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  </script>
+</body>
+</html>

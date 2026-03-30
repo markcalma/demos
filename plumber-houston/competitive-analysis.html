@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Competitive Analysis — Bayou City Plumbing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --white: #ffffff;
+      --surface: #f8fafc;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --ink: #0f172a;
+      --ink-2: #334155;
+      --ink-3: #64748b;
+      --ink-4: #94a3b8;
+      --blue: #2563eb;
+      --blue-light: #eff6ff;
+      --blue-mid: #bfdbfe;
+      --green: #16a34a;
+      --red: #dc2626;
+      --amber: #d97706;
+      --font: 'Inter', system-ui, sans-serif;
+    }
+
+    html { font-size: 15px; }
+    body {
+      font-family: var(--font);
+      background: var(--white);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+    }
+
+    .page { max-width: 900px; margin: 0 auto; padding: 72px 48px 120px; }
+
+    /* ── Cover ── */
+    .cover {
+      padding-bottom: 56px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 72px;
+    }
+    .cover-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 24px;
+    }
+    .cover-eyebrow::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--blue);
+      border-radius: 2px;
+    }
+    .cover-title {
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 18px;
+    }
+    .cover-title span { color: var(--blue); }
+    .cover-sub {
+      font-size: 0.95rem;
+      color: var(--ink-3);
+      line-height: 1.75;
+      max-width: 560px;
+      margin-bottom: 40px;
+    }
+    .cover-meta {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      width: fit-content;
+    }
+    .cover-meta-item {
+      padding: 14px 24px;
+      border-right: 1px solid var(--border);
+      font-size: 0.8rem;
+    }
+    .cover-meta-item:last-child { border-right: none; }
+    .cover-meta-item strong {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-4);
+      margin-bottom: 4px;
+    }
+    .cover-meta-item span { font-weight: 500; color: var(--ink-2); }
+
+    /* ── Section ── */
+    .section { margin-bottom: 80px; }
+    .section-header { margin-bottom: 32px; }
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+    .section-eyebrow::before {
+      content: '';
+      display: block;
+      width: 14px;
+      height: 2px;
+      background: var(--blue);
+      border-radius: 2px;
+    }
+    .section-title {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+    .section-body {
+      font-size: 0.9rem;
+      color: var(--ink-3);
+      line-height: 1.75;
+      max-width: 640px;
+    }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: -40px 0 56px;
+    }
+    .divider-line { flex: 1; height: 1px; background: var(--border); }
+    .divider-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--blue); opacity: 0.4; flex-shrink: 0;
+    }
+
+    /* ── Summary alert ── */
+    .summary-box {
+      background: var(--blue-light);
+      border: 1px solid var(--blue-mid);
+      border-left: 3px solid var(--blue);
+      border-radius: 8px;
+      padding: 20px 24px;
+      font-size: 0.88rem;
+      color: var(--ink-2);
+      line-height: 1.7;
+      margin-top: 20px;
+    }
+    .summary-box strong { color: var(--ink); }
+
+    /* ── Tags ── */
+    .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+    .tag {
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--border-strong);
+      color: var(--ink-3);
+      background: var(--surface);
+    }
+    .tag.blue {
+      background: var(--blue-light);
+      border-color: var(--blue-mid);
+      color: var(--blue);
+    }
+
+    /* ── Competitor Cards ── */
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      background: var(--white);
+    }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .card-company {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    .card-url {
+      font-size: 0.75rem;
+      color: var(--ink-4);
+      margin-top: 4px;
+      font-weight: 400;
+    }
+    .card-score-wrap { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .score-bar-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+    .score-bar-track {
+      width: 120px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .score-bar-fill {
+      height: 100%;
+      background: var(--blue);
+      border-radius: 2px;
+    }
+    .score-label {
+      font-size: 0.68rem;
+      color: var(--ink-4);
+      font-weight: 500;
+    }
+    .score-num {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .score-num sub {
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--ink-4);
+      vertical-align: baseline;
+      margin-left: 2px;
+    }
+
+    .card-body { padding: 24px 28px; }
+
+    /* Swatches */
+    .swatches { display: flex; gap: 6px; margin-bottom: 20px; }
+    .swatch {
+      width: 24px; height: 24px; border-radius: 5px;
+      border: 1px solid rgba(0,0,0,0.08);
+      flex-shrink: 0;
+      position: relative;
+      cursor: default;
+    }
+    .swatch-label {
+      font-size: 0.65rem;
+      color: var(--ink-4);
+      margin-left: 4px;
+      align-self: center;
+    }
+
+    .card-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 20px; }
+    @media (max-width: 600px) { .card-cols { grid-template-columns: 1fr; } }
+
+    .col-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-4);
+      margin-bottom: 10px;
+    }
+
+    .item-list { list-style: none; }
+    .item-list li {
+      font-size: 0.82rem;
+      color: var(--ink-3);
+      line-height: 1.5;
+      padding: 5px 0 5px 18px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+    .item-list li:last-child { border-bottom: none; }
+    .item-list.strengths li::before {
+      content: '+';
+      position: absolute; left: 0;
+      color: var(--green);
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+    .item-list.weaknesses li::before {
+      content: '−';
+      position: absolute; left: 0;
+      color: var(--red);
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .quote-line {
+      font-size: 0.85rem;
+      color: var(--ink-2);
+      font-style: italic;
+      padding: 12px 16px;
+      background: var(--surface);
+      border-radius: 6px;
+      border-left: 2px solid var(--blue);
+    }
+
+    /* ── Tables ── */
+    .table-wrap { overflow-x: auto; margin-top: 24px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    thead { background: var(--ink); }
+    th {
+      padding: 11px 16px;
+      text-align: left;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      white-space: nowrap;
+    }
+    th:first-child { color: #fff; }
+    td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--ink-2);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--surface); }
+    .td-center { text-align: center; }
+    .score-high { color: var(--green); font-weight: 700; }
+    .score-mid  { color: var(--amber); font-weight: 700; }
+    .score-low  { color: var(--red);   font-weight: 700; }
+    .total-row td { background: var(--surface) !important; font-weight: 700; color: var(--ink); border-top: 2px solid var(--border-strong); }
+    .check { color: var(--green); font-weight: 700; text-align: center; }
+    .cross { color: var(--red);   font-weight: 700; text-align: center; }
+    .own  { color: var(--blue);   font-weight: 700; text-align: center; }
+    .uncontested { color: var(--green); font-weight: 600; font-size: 0.78rem; }
+    .opportunity { color: var(--blue); font-weight: 600; font-size: 0.78rem; }
+
+    /* ── Patterns ── */
+    .pattern {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 20px;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: flex-start;
+    }
+    .pattern:last-child { border-bottom: none; }
+    .pattern-num {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--blue);
+      background: var(--blue-light);
+      border: 1px solid var(--blue-mid);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+    .pattern-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; color: var(--ink); }
+    .pattern-body { font-size: 0.85rem; color: var(--ink-3); line-height: 1.7; }
+    .pattern-rec {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--blue);
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .pattern-rec::before { content: '→'; flex-shrink: 0; }
+
+    /* ── Pillars ── */
+    .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 28px 0; }
+    @media (max-width: 600px) { .pillars { grid-template-columns: 1fr; } }
+    .pillar {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .pillar-num {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+    .pillar-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 8px; color: var(--ink); }
+    .pillar-body { font-size: 0.8rem; color: var(--ink-3); line-height: 1.6; }
+
+    /* ── Action list ── */
+    .action-list { list-style: none; margin-top: 20px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .action-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 13px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--ink-2);
+      line-height: 1.5;
+    }
+    .action-list li:last-child { border-bottom: none; }
+    .action-list li::before {
+      content: '';
+      width: 18px; height: 18px;
+      border: 1.5px solid var(--border-strong);
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── Volume bar ── */
+    .vol-bar {
+      display: inline-block;
+      height: 4px;
+      background: var(--blue);
+      opacity: 0.35;
+      border-radius: 2px;
+      vertical-align: middle;
+      margin-left: 6px;
+    }
+
+    /* ── Report footer ── */
+    .report-footer {
+      margin-top: 80px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--ink-4);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .report-footer strong { color: var(--ink-2); }
+
+    /* ── Print ── */
+    @media print {
+      .page { padding: 32px; max-width: 100%; }
+      .card { break-inside: avoid; }
+      .pattern { break-inside: avoid; }
+      .section { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+      @page { margin: 1.5cm; size: A4; }
+    }
+
+    @media (max-width: 640px) {
+      .page { padding: 32px 20px 60px; }
+      .cover-meta { flex-direction: column; width: 100%; }
+      .cover-meta-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .cover-meta-item:last-child { border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Cover -->
+  <header class="cover">
+    <div class="cover-eyebrow">Competitive Intelligence Report</div>
+    <h1 class="cover-title">Houston Plumbing<br><span>Market Analysis</span></h1>
+    <p class="cover-sub">A deep analysis of the top 5 plumbing companies in the Greater Houston market — their design, messaging, conversion strategy, and the gaps Bayou City Plumbing is uniquely positioned to exploit.</p>
+    <div class="cover-meta">
+      <div class="cover-meta-item"><strong>Client</strong><span>Bayou City Plumbing</span></div>
+      <div class="cover-meta-item"><strong>Market</strong><span>Greater Houston, TX</span></div>
+      <div class="cover-meta-item"><strong>Date</strong><span>March 2026</span></div>
+      <div class="cover-meta-item"><strong>Competitors</strong><span>5 analyzed</span></div>
+    </div>
+  </header>
+
+  <!-- 00 Executive Summary -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-eyebrow">00 — Overview</div>
+      <h2 class="section-title">Executive Summary</h2>
+    </div>
+    <p class="section-body">The Houston plumbing market is dominated by two players with significant review moats — Village Plumbing at 9,000+ Google reviews, and Abacus with multiple award certifications — and a long tail of undifferentiated competitors with weak design and thin conversion architecture.</p>
+    <div class="summary-box">
+      <strong>Key finding:</strong> No competitor in the Houston market operates with a premium dark-mode aesthetic or scroll-animated experience. The entire market uses dated, template-driven sites that look identical to each other. Bayou City Plumbing's current design is already the most visually advanced site in the market. The gap to close is in <strong>conversion infrastructure</strong> — reviews, online booking, trust badges, and schema markup. Adding those to a superior design creates a dominant position no competitor can quickly replicate.
+    </div>
+    <div class="tags">
+      <span class="tag blue">Design Leadership Gap</span>
+      <span class="tag blue">Review Infrastructure Critical</span>
+      <span class="tag">Multi-Path CTA Needed</span>
+      <span class="tag">Schema Markup Missing</span>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+  <!-- 01 Scoring -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-eyebrow">01 — Scoring Matrix</div>
+      <h2 class="section-title">How Competitors Stack Up</h2>
+      <p class="section-body">Each competitor scored 1–10 across 8 criteria that determine market position and conversion performance.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Criterion</th>
+            <th>Abacus</th>
+            <th>Village</th>
+            <th>Mammoth</th>
+            <th>AAA</th>
+            <th>Best Plumbing</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Search Visibility</td>
+            <td class="td-center score-high">9</td>
+            <td class="td-center score-high">8</td>
+            <td class="td-center score-mid">7</td>
+            <td class="td-center score-mid">6</td>
+            <td class="td-center score-mid">6</td>
+          </tr>
+          <tr>
+            <td>Review Quality / Volume</td>
+            <td class="td-center score-high">9</td>
+            <td class="td-center score-high">10</td>
+            <td class="td-center score-mid">6</td>
+            <td class="td-center score-mid">7</td>
+            <td class="td-center score-low">5</td>
+          </tr>
+          <tr>
+            <td>Visual Design</td>
+            <td class="td-center score-mid">7</td>
+            <td class="td-center score-mid">7</td>
+            <td class="td-center score-low">5</td>
+            <td class="td-center score-mid">6</td>
+            <td class="td-center score-low">4</td>
+          </tr>
+          <tr>
+            <td>Mobile Responsive</td>
+            <td class="td-center score-high">8</td>
+            <td class="td-center score-high">8</td>
+            <td class="td-center score-mid">7</td>
+            <td class="td-center score-mid">7</td>
+            <td class="td-center score-low">5</td>
+          </tr>
+          <tr>
+            <td>Content Depth</td>
+            <td class="td-center score-high">9</td>
+            <td class="td-center score-high">9</td>
+            <td class="td-center score-mid">6</td>
+            <td class="td-center score-high">8</td>
+            <td class="td-center score-mid">7</td>
+          </tr>
+          <tr>
+            <td>Social Proof</td>
+            <td class="td-center score-high">9</td>
+            <td class="td-center score-high">10</td>
+            <td class="td-center score-mid">7</td>
+            <td class="td-center score-high">8</td>
+            <td class="td-center score-mid">6</td>
+          </tr>
+          <tr>
+            <td>CTA Strategy</td>
+            <td class="td-center score-high">9</td>
+            <td class="td-center score-high">9</td>
+            <td class="td-center score-mid">7</td>
+            <td class="td-center score-mid">7</td>
+            <td class="td-center score-mid">7</td>
+          </tr>
+          <tr>
+            <td>Page Speed</td>
+            <td class="td-center score-mid">7</td>
+            <td class="td-center score-mid">7</td>
+            <td class="td-center score-mid">6</td>
+            <td class="td-center score-mid">6</td>
+            <td class="td-center score-low">5</td>
+          </tr>
+          <tr class="total-row">
+            <td>Total / 80</td>
+            <td class="td-center">67</td>
+            <td class="td-center">68</td>
+            <td class="td-center">51</td>
+            <td class="td-center">55</td>
+            <td class="td-center">45</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+  <!-- 02 Profiles -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-eyebrow">02 — Deep Profiles</div>
+      <h2 class="section-title">Competitor by Competitor</h2>
+    </div>
+
+    <!-- Abacus -->
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <div class="card-company">Abacus Plumbing, A/C &amp; Electrical</div>
+          <div class="card-url">abacusplumbing.net · Est. 2003 · Multi-service</div>
+        </div>
+        <div class="card-score-wrap">
+          <div class="score-bar-wrap">
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:83.75%"></div></div>
+            <div class="score-label">67 / 80</div>
+          </div>
+          <div class="score-num">67<sub>/80</sub></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="col-label">Brand Colors</div>
+        <div class="swatches" style="margin-bottom:20px">
+          <div class="swatch" style="background:#c0392b" title="Primary Red"></div>
+          <div class="swatch" style="background:#1a2e4a" title="Navy Blue"></div>
+          <div class="swatch" style="background:#f1c40f" title="Gold Accent"></div>
+          <div class="swatch" style="background:#fff;border-color:#ddd" title="White"></div>
+          <span class="swatch-label">Red · Navy · Gold</span>
+        </div>
+        <div class="card-cols">
+          <div>
+            <div class="col-label">Strengths</div>
+            <ul class="item-list strengths">
+              <li>BBB Pinnacle 2025 + Houston Chronicle "Best of the Best" — named awards everywhere</li>
+              <li>Offer-led CTAs per service ("Get This Offer") — converts browsers to leads</li>
+              <li>HVAC + Electrical breadth = larger ticket per customer</li>
+              <li>Financing front and center removes price objection</li>
+              <li>Online scheduler reduces friction vs phone-only</li>
+            </ul>
+          </div>
+          <div>
+            <div class="col-label">Weaknesses</div>
+            <ul class="item-list weaknesses">
+              <li>Dated design — cluttered, Yellow Pages energy</li>
+              <li>No emotional narrative or brand story</li>
+              <li>Heavy stock imagery — impersonal</li>
+              <li>No dark-mode or premium aesthetic</li>
+              <li>Offers over trust-building above the fold</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quote-line">"Award-winning 24/7 emergency services for plumbing, electrical, and HVAC with licensed technicians."</div>
+        <div class="tags" style="margin-top:16px">
+          <span class="tag blue">BBB Pinnacle 2025</span>
+          <span class="tag">Multi-service</span>
+          <span class="tag">Online booking</span>
+          <span class="tag">Financing</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Village -->
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <div class="card-company">Village Plumbing, Air &amp; Electric</div>
+          <div class="card-url">villageplumbing.com · Est. 1946 · #1 review volume</div>
+        </div>
+        <div class="card-score-wrap">
+          <div class="score-bar-wrap">
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:85%"></div></div>
+            <div class="score-label">68 / 80</div>
+          </div>
+          <div class="score-num">68<sub>/80</sub></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="col-label">Brand Colors</div>
+        <div class="swatches" style="margin-bottom:20px">
+          <div class="swatch" style="background:#1a3a5c"></div>
+          <div class="swatch" style="background:#2ab3a1"></div>
+          <div class="swatch" style="background:#c8f1db"></div>
+          <div class="swatch" style="background:#333"></div>
+          <span class="swatch-label">Navy · Teal · Mint</span>
+        </div>
+        <div class="card-cols">
+          <div>
+            <div class="col-label">Strengths</div>
+            <ul class="item-list strengths">
+              <li>9,000+ Google reviews — most powerful trust signal in Houston</li>
+              <li>"Since 1946" — 80-year moat, almost unbeatable positioning</li>
+              <li>Named "Village Guarantee" adds formal credibility</li>
+              <li>"Cleanest Techs in Town" — specific, visual, memorable</li>
+              <li>$17.99/mo Partner Plan creates recurring revenue + loyalty</li>
+            </ul>
+          </div>
+          <div>
+            <div class="col-label">Weaknesses</div>
+            <ul class="item-list weaknesses">
+              <li>Generic design — indistinguishable from national chains</li>
+              <li>Teal/navy palette used by dozens of competitors</li>
+              <li>No premium or dark-mode aesthetic</li>
+              <li>Corporate feel — lacks personality</li>
+              <li>Membership underpriced vs. perceived value</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quote-line">"Keeping Houston Homes Running Strong Since 1946. The Cleanest Techs in Town."</div>
+        <div class="tags" style="margin-top:16px">
+          <span class="tag blue">9,000+ Reviews</span>
+          <span class="tag blue">80-Year Brand</span>
+          <span class="tag">Membership plan</span>
+          <span class="tag">Named guarantee</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mammoth -->
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <div class="card-company">Mammoth Plumbing</div>
+          <div class="card-url">mammothplumbing.com · Est. ~2000 · Residential</div>
+        </div>
+        <div class="card-score-wrap">
+          <div class="score-bar-wrap">
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:63.75%"></div></div>
+            <div class="score-label">51 / 80</div>
+          </div>
+          <div class="score-num">51<sub>/80</sub></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="col-label">Brand Colors</div>
+        <div class="swatches" style="margin-bottom:20px">
+          <div class="swatch" style="background:#1D7543"></div>
+          <div class="swatch" style="background:#0E3920"></div>
+          <div class="swatch" style="background:#FFCC00"></div>
+          <div class="swatch" style="background:#7A7A7A"></div>
+          <span class="swatch-label">Green · Dark Green · Yellow</span>
+        </div>
+        <div class="card-cols">
+          <div>
+            <div class="col-label">Strengths</div>
+            <ul class="item-list strengths">
+              <li>"#1 Plumber in Houston" — confident, unambiguous claim</li>
+              <li>25+ years in market — second only to Village</li>
+              <li>Green/yellow palette stands out in navy/red market</li>
+              <li>Review aggregation across Google, Facebook, Yelp</li>
+            </ul>
+          </div>
+          <div>
+            <div class="col-label">Weaknesses</div>
+            <ul class="item-list weaknesses">
+              <li>9am–5pm hours conflict with "emergency" messaging</li>
+              <li>Design quality doesn't match bold positioning</li>
+              <li>Thin content — limited page depth</li>
+              <li>No online booking visible</li>
+              <li>Hero copy is vague ("get the job done right")</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quote-line">"The #1 Plumber in Houston For 25+ Years!"</div>
+        <div class="tags" style="margin-top:16px">
+          <span class="tag">Bold Positioning</span>
+          <span class="tag">25+ Years</span>
+          <span class="tag">Multi-platform reviews</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AAA -->
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <div class="card-company">AAA Plumbers</div>
+          <div class="card-url">aaaplumbers.com · Est. 1984 · Commercial B2B</div>
+        </div>
+        <div class="card-score-wrap">
+          <div class="score-bar-wrap">
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:68.75%"></div></div>
+            <div class="score-label">55 / 80</div>
+          </div>
+          <div class="score-num">55<sub>/80</sub></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="col-label">Brand Colors</div>
+        <div class="swatches" style="margin-bottom:20px">
+          <div class="swatch" style="background:#043C71"></div>
+          <div class="swatch" style="background:#949CA3"></div>
+          <div class="swatch" style="background:#F7F9FC;border-color:#ddd"></div>
+          <span class="swatch-label">Deep Blue · Gray · Light BG</span>
+        </div>
+        <div class="card-cols">
+          <div>
+            <div class="col-label">Strengths</div>
+            <ul class="item-list strengths">
+              <li>Clear niche: commercial/multi-family only — no confusion</li>
+              <li>40+ years (est. 1984) — generational credibility</li>
+              <li>BBB, HAA, PHCC, CAG memberships — professional associations</li>
+              <li>8-county coverage explicitly listed — strong geo SEO</li>
+            </ul>
+          </div>
+          <div>
+            <div class="col-label">Weaknesses</div>
+            <ul class="item-list weaknesses">
+              <li>Cedes the entire residential consumer market</li>
+              <li>Dated corporate design — no visual premium</li>
+              <li>No customer reviews visible on homepage</li>
+              <li>Form-only CTA — high friction, no phone prominent</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quote-line">"Serving Houston Since 1984. A Culture That Gives Back To The Community."</div>
+        <div class="tags" style="margin-top:16px">
+          <span class="tag">Commercial B2B</span>
+          <span class="tag">40+ Years</span>
+          <span class="tag">BBB / PHCC Member</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Best Plumbing -->
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <div class="card-company">Best Plumbing</div>
+          <div class="card-url">bestplumbing.net · Commercial specialty · 30-truck fleet</div>
+        </div>
+        <div class="card-score-wrap">
+          <div class="score-bar-wrap">
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:56.25%"></div></div>
+            <div class="score-label">45 / 80</div>
+          </div>
+          <div class="score-num">45<sub>/80</sub></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="col-label">Brand Colors</div>
+        <div class="swatches" style="margin-bottom:20px">
+          <div class="swatch" style="background:#f79520"></div>
+          <div class="swatch" style="background:#32373c"></div>
+          <div class="swatch" style="background:#fff;border-color:#ddd"></div>
+          <span class="swatch-label">Orange · Charcoal · White</span>
+        </div>
+        <div class="card-cols">
+          <div>
+            <div class="col-label">Strengths</div>
+            <ul class="item-list strengths">
+              <li>30-truck fleet callout — operational scale, unusual signal</li>
+              <li>Live 24/7 phone answering (not voicemail)</li>
+              <li>Commercial verticals named explicitly</li>
+              <li>TSBPE license prominently displayed</li>
+            </ul>
+          </div>
+          <div>
+            <div class="col-label">Weaknesses</div>
+            <ul class="item-list weaknesses">
+              <li>No design investment — pure utility</li>
+              <li>No social proof — zero reviews or testimonials</li>
+              <li>Orange/gray palette — generic and unmemorable</li>
+              <li>Not competitive for residential emergency search</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quote-line">"No job is too big or too small. 24/7 live answering. 30 trucks ready."</div>
+        <div class="tags" style="margin-top:16px">
+          <span class="tag">30-Truck Fleet</span>
+          <span class="tag">Live 24/7 Answer</span>
+          <span class="tag">Commercial Focus</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+  <!-- 03 SEO -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-eyebrow">03 — Search Landscape</div>
+      <h2 class="section-title">SEO Keyword Opportunities</h2>
+      <p class="section-body">Where competitors rank and where the gaps are. Several high-value terms are completely uncontested.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Keyword</th>
+            <th>Est. Volume / mo</th>
+            <th>Who Ranks</th>
+            <th>Opportunity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>"plumber houston"</td>
+            <td>9,900+ <span class="vol-bar" style="width:72px"></span></td>
+            <td>Abacus, Village</td>
+            <td>Competitive — long-term build</td>
+          </tr>
+          <tr>
+            <td>"emergency plumber houston"</td>
+            <td>3,600+ <span class="vol-bar" style="width:40px"></span></td>
+            <td>Village, Abacus</td>
+            <td>High value, needs review velocity</td>
+          </tr>
+          <tr>
+            <td>"24/7 plumber houston tx"</td>
+            <td>1,900+ <span class="vol-bar" style="width:24px"></span></td>
+            <td>Village, Mammoth</td>
+            <td>Medium — achievable with schema</td>
+          </tr>
+          <tr>
+            <td>"water heater replacement houston"</td>
+            <td>1,300+ <span class="vol-bar" style="width:18px"></span></td>
+            <td>Abacus</td>
+            <td>Dedicated service page needed</td>
+          </tr>
+          <tr>
+            <td>"flat rate plumber houston"</td>
+            <td>590+ <span class="vol-bar" style="width:10px"></span></td>
+            <td class="uncontested">Uncontested</td>
+            <td class="opportunity">Quick win — own this now</td>
+          </tr>
+          <tr>
+            <td>"same day water heater houston"</td>
+            <td>480+ <span class="vol-bar" style="width:8px"></span></td>
+            <td class="uncontested">Uncontested</td>
+            <td class="opportunity">Quick win — own this now</td>
+          </tr>
+          <tr>
+            <td>"houston plumber guarantee"</td>
+            <td>210+ <span class="vol-bar" style="width:5px"></span></td>
+            <td class="uncontested">Uncontested</td>
+            <td class="opportunity">Already in messaging — create page</td>
+          </tr>
+          <tr>
+            <td>Neighborhood pages (50+ areas)</td>
+            <td>varies</td>
+            <td>Village (25 areas)</td>
+            <td>Build to 40+ areas — geo moat</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+  <!-- 04 Design Gap -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-eyebrow">04 — Design Gap Analysis</div>
+      <h2 class="section-title">Where Bayou City Already Wins</h2>
+      <p class="section-body">Bayou City sweeps the design column. No competitor has any of these features. The gap is in conversion infrastructure.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Abacus</th>
+            <th>Village</th>
+            <th>Mammoth</th>
+            <th>AAA</th>
+            <th>Best</th>
+            <th style="color:#93c5fd">Bayou City</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Dark / premium aesthetic</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="own">✓</td></tr>
+          <tr><td>Video hero</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="own">✓</td></tr>
+          <tr><td>Scroll animations</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="own">✓</td></tr>
+          <tr><td>Glassmorphism cards</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="own">✓</td></tr>
+          <tr><td>Count-up animated stats</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="own">✓</td></tr>
+          <tr><td>Review section</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+          <tr><td>Online booking</td><td class="check">✓</td><td class="check">✓</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td><td class="cross">✗</td></tr>
+          <tr><td>Trust badges (BBB, Expertise)</td><td class="check">✓</td><td class="check">✓</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td><td class="cross">✗</td></tr>
+          <tr><td>Service area map</td><td class="cross">✗</td><td class="check">✓</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td><td class="cross">✗</td></tr>
+          <tr><td>Schema markup</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+  <!-- 05 Patterns -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-eyebrow">05 — Patterns of the Top 10%</div>
+      <h2 class="section-title">What Every Winner Does</h2>
+      <p class="section-body">Five behaviors that consistently separate Abacus and Village from the rest — and what Bayou City should implement next.</p>
+    </div>
+    <div>
+      <div class="pattern">
+        <div class="pattern-num">01</div>
+        <div>
+          <div class="pattern-title">Massive Review Volume with Active Capture Systems</div>
+          <div class="pattern-body">Village has 9,000+ Google reviews. Abacus has multiple award citations and Nextdoor badges. Both use systematic post-job review request flows — not accidental accumulation. Google Maps pack rankings are dominated by review count and recency. No reviews = invisible in local search.</div>
+          <div class="pattern-rec">Embed review request in the post-job follow-up SMS/email. Target 50 reviews in 90 days.</div>
+        </div>
+      </div>
+      <div class="pattern">
+        <div class="pattern-num">02</div>
+        <div>
+          <div class="pattern-title">Multi-Path Lead Capture — Phone + Form + Offer</div>
+          <div class="pattern-body">Top competitors provide three conversion paths: phone (urgent buyers), online scheduler (planners), and offer/coupon form (deal-seekers). Single-path sites leave money on the table because buyers have different urgency levels and risk tolerances.</div>
+          <div class="pattern-rec">Add "Get Free Estimate" form alongside phone CTA. Add sticky mobile call button. Consider a service-specific offer.</div>
+        </div>
+      </div>
+      <div class="pattern">
+        <div class="pattern-num">03</div>
+        <div>
+          <div class="pattern-title">Named Trust Signals — Not Just "We're the Best"</div>
+          <div class="pattern-body">Abacus lists specific award names and years (BBB Pinnacle 2025, Houston Chronicle Best of Best 2025). Village has a named "Village Guarantee." License numbers appear in footers. Specific, named credentials are believed; vague trust claims are ignored.</div>
+          <div class="pattern-rec">Name the guarantee ("The Bayou City Promise"). Display TSBPE license #. Pursue Expertise.com and BBB badges.</div>
+        </div>
+      </div>
+      <div class="pattern">
+        <div class="pattern-num">04</div>
+        <div>
+          <div class="pattern-title">Heritage Anchor in the Hero</div>
+          <div class="pattern-body">"Since 1946" (Village), "Since 2003" (Abacus), "25+ Years" (Mammoth). Every top competitor anchors in time above the fold — because homeowners equate longevity with reliability. A new plumber feels risky; an established one feels safe.</div>
+          <div class="pattern-rec">"15 years fixing Houston's toughest jobs" is more specific than a round number. Move to hero subtitle or badge.</div>
+        </div>
+      </div>
+      <div class="pattern">
+        <div class="pattern-num">05</div>
+        <div>
+          <div class="pattern-title">Flat-Rate Pricing in the Hero — Not Buried in Features</div>
+          <div class="pattern-body">Village and Abacus state flat-rate/upfront pricing prominently — because pricing anxiety is the #1 friction point for hiring a plumber. Competitors who bury this in a features list lose conversions to those who lead with it.</div>
+          <div class="pattern-rec">Move flat-rate pricing to the hero subtitle or a badge above the H1. It's in the feature cards now — needs promotion.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+  <!-- 06 Recommended Direction -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-eyebrow">06 — Recommended Direction</div>
+      <h2 class="section-title">Bayou City's Competitive Position</h2>
+      <p class="section-body">Keep the design leadership. Close the conversion gap. Build the review infrastructure that makes Google Maps visible. No competitor can quickly replicate this combination.</p>
+    </div>
+
+    <div class="summary-box" style="margin-bottom: 28px; font-style: italic; font-size: 0.92rem;">
+      "The premium Houston plumber — modern, transparent pricing, licensed professionals, and a 15-year guarantee. We look as good as we work."
+    </div>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-num">Pillar 01</div>
+        <div class="pillar-title">Design Leadership</div>
+        <div class="pillar-body">Be the only plumber in Houston with a site that looks like a tech company. Every competitor uses templates. This is a permanent moat as long as the design stays current.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">Pillar 02</div>
+        <div class="pillar-title">Radical Transparency</div>
+        <div class="pillar-body">Flat-rate pricing page, TSBPE license # in the hero, named guarantee. This addresses the #1 anxiety of every plumbing customer.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">Pillar 03</div>
+        <div class="pillar-title">Emergency Speed</div>
+        <div class="pillar-body">"Under 30 seconds to answer" is already in the CTA. Move it to the hero badge and meta description. Speed is the core emergency promise — own it everywhere.</div>
+      </div>
+    </div>
+
+    <div class="col-label" style="margin-top:8px">Immediate Next Actions</div>
+    <ul class="action-list">
+      <li>Add schema markup (LocalBusiness + Plumber type) to index.html</li>
+      <li>Add a "Get Free Estimate" form alongside the phone CTA</li>
+      <li>Add a reviews/testimonials section (5–6 cards with name, neighborhood, rating)</li>
+      <li>Display TSBPE license number in the hero badge or near the CTA</li>
+      <li>Move flat-rate pricing claim to hero subtitle</li>
+      <li>Add Expertise.com and BBB trust badge images near CTA</li>
+      <li>Add sticky mobile "Call Now" button (fixed bottom on mobile)</li>
+      <li>Build neighborhood service pages for SEO (start with top 10 Houston areas)</li>
+    </ul>
+  </section>
+
+  <!-- Footer -->
+  <footer class="report-footer">
+    <div><strong>Bayou City Plumbing</strong> · Competitive Analysis · March 2026</div>
+    <div>Prepared by Claude Code · Confidential</div>
+  </footer>
+
+</div>
+</body>
+</html>
