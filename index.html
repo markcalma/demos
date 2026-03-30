@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demos — Mark Calma</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #0f172a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+    .wrap { max-width: 640px; width: 100%; }
+    .label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #2563eb;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+    p { color: #64748b; font-size: 0.95rem; margin-bottom: 48px; }
+    .demos { display: flex; flex-direction: column; gap: 12px; }
+    .demo-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #fff;
+      background: #0f172a;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .demo-card:hover { border-color: #2563eb; background: #111827; }
+    .demo-name { font-weight: 600; font-size: 0.95rem; }
+    .demo-meta { font-size: 0.78rem; color: #475569; margin-top: 4px; }
+    .demo-arrow { color: #334155; font-size: 1.2rem; transition: color 0.2s; }
+    .demo-card:hover .demo-arrow { color: #2563eb; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="label">Portfolio · Demos</div>
+    <h1>Client Demo Sites</h1>
+    <p>Live demos built for prospects. Each includes a competitive analysis report.</p>
+    <div class="demos">
+      <a href="/plumber-houston" class="demo-card">
+        <div>
+          <div class="demo-name">Bayou City Plumbing</div>
+          <div class="demo-meta">Houston, TX · Emergency Plumbing</div>
+        </div>
+        <div class="demo-arrow">→</div>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
