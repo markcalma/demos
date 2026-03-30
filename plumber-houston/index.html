@@ -265,34 +265,33 @@
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: auto auto;
-      gap: 16px;
+      gap: 24px;
       max-width: 1100px;
       margin: 60px auto 0;
     }
     .gallery-item {
-      border-radius: 16px; overflow: hidden; position: relative;
+      border-radius: 16px; overflow: hidden;
       border: 1px solid var(--border);
+      background: var(--bg-card);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .gallery-item:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
-    .gallery-item.large { grid-column: span 2; }
-    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 220px; }
-    .gallery-item .gallery-label {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 20px 20px 16px;
-      background: linear-gradient(to top, rgba(9,17,31,0.9), transparent);
+    .gallery-item img {
+      width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;
+    }
+    .gallery-caption {
+      padding: 14px 16px;
       font-size: 0.82rem; font-weight: 600; letter-spacing: 0.02em;
-      color: rgba(255,255,255,0.9);
+      color: var(--text-secondary);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
     }
-    @media (max-width: 768px) {
-      .gallery-grid { grid-template-columns: 1fr 1fr; }
-      .gallery-item.large { grid-column: span 2; }
+    .gallery-caption::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0;
     }
-    @media (max-width: 500px) {
-      .gallery-grid { grid-template-columns: 1fr; }
-      .gallery-item.large { grid-column: span 1; }
-    }
+    @media (max-width: 768px) { .gallery-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 500px) { .gallery-grid { grid-template-columns: 1fr; } }
 
     /* ── Contact Form ── */
     #contact { position: relative; z-index: 1; padding: 100px 32px; }
@@ -475,25 +474,41 @@
       <p class="section-sub">From emergency burst pipes to full bathroom repiping — here's a look at what we do every day across Houston.</p>
     </div>
     <div class="gallery-grid">
-      <div class="gallery-item large reveal">
-        <img src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=900&q=80" alt="Plumber fixing pipes under sink">
-        <div class="gallery-label">Pipe Repair &amp; Leak Detection</div>
+      <div class="gallery-item reveal">
+        <img src="plumbing-images/Pipe Repair & Leak Detection.jpg" alt="Pipe Repair & Leak Detection">
+        <div class="gallery-caption">Pipe Repair &amp; Leak Detection</div>
       </div>
       <div class="gallery-item reveal">
-        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Water heater installation">
-        <div class="gallery-label">Water Heater Install</div>
+        <img src="plumbing-images/Water Heater Installation.jpg" alt="Water Heater Installation">
+        <div class="gallery-caption">Water Heater Installation</div>
       </div>
       <div class="gallery-item reveal">
-        <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&q=80" alt="Drain cleaning service">
-        <div class="gallery-label">Drain Cleaning</div>
+        <img src="plumbing-images/Drain Cleaning.jpg" alt="Drain Cleaning">
+        <div class="gallery-caption">Drain Cleaning</div>
       </div>
       <div class="gallery-item reveal">
-        <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80" alt="Bathroom plumbing">
-        <div class="gallery-label">Bathroom Plumbing</div>
+        <img src="plumbing-images/Bathroom Plumbing.jpg" alt="Bathroom Plumbing">
+        <div class="gallery-caption">Bathroom Plumbing</div>
       </div>
-      <div class="gallery-item large reveal">
-        <img src="https://images.unsplash.com/photo-1607400201515-c2c41c07d307?w=900&q=80" alt="Emergency plumbing repair">
-        <div class="gallery-label">Emergency Repairs — 24/7</div>
+      <div class="gallery-item reveal">
+        <img src="plumbing-images/Emergency Repair.jpg" alt="Emergency Repair">
+        <div class="gallery-caption">Emergency Repair</div>
+      </div>
+      <div class="gallery-item reveal">
+        <img src="plumbing-images/Sewer Line Service.jpg" alt="Sewer Line Service">
+        <div class="gallery-caption">Sewer Line Service</div>
+      </div>
+      <div class="gallery-item reveal">
+        <img src="plumbing-images/Kitchen Plumbing.jpg" alt="Kitchen Plumbing">
+        <div class="gallery-caption">Kitchen Plumbing</div>
+      </div>
+      <div class="gallery-item reveal">
+        <img src="plumbing-images/Repiping.jpg" alt="Repiping">
+        <div class="gallery-caption">Repiping</div>
+      </div>
+      <div class="gallery-item reveal">
+        <img src="plumbing-images/Toilet Repair & Replacement.jpg" alt="Toilet Repair & Replacement">
+        <div class="gallery-caption">Toilet Repair &amp; Replacement</div>
       </div>
     </div>
   </section>
