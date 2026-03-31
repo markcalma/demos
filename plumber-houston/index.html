@@ -521,7 +521,7 @@
       <p class="section-sub">Tell us what's going on. A licensed plumber will follow up within the hour — no call centers, no runaround.</p>
     </div>
     <div class="contact-wrap reveal">
-      <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <form id="contact-form">
         <div class="form-row">
           <div class="form-group">
             <label for="name">Your Name</label>
@@ -553,6 +553,26 @@
         <button type="submit" class="form-submit">Send Request →</button>
         <p class="form-note">⚡ We typically respond within 60 minutes · No spam, ever.</p>
       </form>
+      <script>
+        document.getElementById('contact-form').addEventListener('submit', async function(e) {
+          e.preventDefault();
+          const btn = this.querySelector('.form-submit');
+          btn.textContent = 'Sending...';
+          btn.disabled = true;
+          const data = Object.fromEntries(new FormData(this).entries());
+          try {
+            await fetch('https://n8n.srv1258745.hstgr.cloud/webhook/contact-form-plumber', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data)
+            });
+            btn.textContent = '✓ Request Sent!';
+          } catch(err) {
+            btn.textContent = 'Send Request →';
+            btn.disabled = false;
+          }
+        });
+      </script>
     </div>
   </section>
 
